@@ -112,7 +112,11 @@ async fn get_versions(verbose: bool, param: Value) -> Result<Value, anyhow::Erro
         .disable_sort()
         .noborder(true) // just not helpful for version info which gets copy pasted often
         .column(ColumnConfig::new("Package"))
-        .column(ColumnConfig::new("Version"))
+        .column(
+            ColumnConfig::new("OldVersion")
+                .header("Version")
+                .renderer(|value, _record| Ok(value.as_str().unwrap_or("unknown").to_string())),
+        )
         .column(ColumnConfig::new("ExtraInfo").header("Extra Info"));
     let return_type = &server::api::nodes::apt::API_METHOD_GET_VERSIONS.returns;
 
